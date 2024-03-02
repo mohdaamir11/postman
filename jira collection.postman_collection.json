@@ -1,0 +1,313 @@
+{
+	"info": {
+		"_postman_id": "e8d5442a-83ae-4091-9fb3-a51d56bc10a0",
+		"name": "jira collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5093693",
+		"_collection_link": "https://dark-water-5847.postman.co/workspace/Jira-APIs-workspace~6fbecf45-6843-41fb-965c-93d66ac2d2d0/collection/5093693-e8d5442a-83ae-4091-9fb3-a51d56bc10a0?action=share&source=collection_link&creator=5093693"
+	},
+	"item": [
+		{
+			"name": "GET ALL PROJECT DETAILS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"    \r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}rest/api/3/project",
+					"host": [
+						"{{baseURL}}rest"
+					],
+					"path": [
+						"api",
+						"3",
+						"project"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create an issue",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Test1\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    console.log(jsonData.id);\r",
+							"   \r",
+							"});\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.response.to.have.status(201);\r",
+							"    pm.response.to.have.status(\"Created\");\r",
+							"     pm.globals.set(\"issueID\", jsonData.id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"is content type header present\", () => {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"\r",
+							"});\r",
+							"pm.test(\"is content type header a json\", () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json;charset=UTF-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"cookies are present\", () => {\r",
+							"    pm.expect(pm.cookies.has('atlassian.xsrf.token')).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"cookies are present\", () => {\r",
+							"    pm.expect(pm.cookies.get('atlassian.xsrf.token')).to.eql('143bf335333d1e1d41ba7e05985fa28d98dcd6af_lin');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response time should be less than 1000ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.above(1000);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.test(\"verify the data type of json response\", () => {\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData.key).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"var schema= {\r",
+							"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"id\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"key\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"self\": {\r",
+							"      \"type\": \"string\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"id\",\r",
+							"    \"key\",\r",
+							"    \"self\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"pm.test(\"schema validator\", function(){\r",
+							"    pm.expect(tv4.validate(jsonData,schema)).to.be.true;\r",
+							"} );\r",
+							"\r",
+							"// console.log(summary_rand);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var random = Math.random().toString(8).substring(2);\r",
+							"\r",
+							"console.log(random);\r",
+							"var summ = random+\"this is the summary of the issue\";\r",
+							"// var usrmail_rand = \"aamir\"+random+\"@gmail.com\";\r",
+							"// var usrname_rand = \"aam\"+random;\r",
+							"\r",
+							"pm.globals.set(\"summary_env_var\", summ);\r",
+							"\r",
+							"const randomNumber = _.random(0,1000);\r",
+							"console.log(randomNumber);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fields\": {\r\n    \"assignee\": {\r\n      \"id\": \"712020:9cd43a81-2f36-4899-b8da-0d71df2eb534\"\r\n    },\r\n    \"description\": {\r\n      \"content\": [\r\n        {\r\n          \"content\": [\r\n            {\r\n              \"text\": \"its the description\",\r\n              \"type\": \"text\"\r\n            }\r\n          ],\r\n          \"type\": \"paragraph\"\r\n        }\r\n      ],\r\n      \"type\": \"doc\",\r\n      \"version\": 1\r\n    },\r\n    \"issuetype\": {\r\n      \"id\": \"10001\"\r\n    },\r\n   \r\n    \"project\": {\r\n      \"id\": \"10000\"\r\n    },\r\n    \"reporter\": {\r\n      \"id\": \"712020:9cd43a81-2f36-4899-b8da-0d71df2eb534\"\r\n    },\r\n    \"summary\": \"{{summary_env_var}}\"\r\n  }\r\n}"
+				},
+				"url": {
+					"raw": "{{baseURL}}rest/api/3/issue",
+					"host": [
+						"{{baseURL}}rest"
+					],
+					"path": [
+						"api",
+						"3",
+						"issue"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update issue by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fields\": {\r\n\r\n    \"summary\": \"new updated Completed orders still displaying in pending\"\r\n  },\r\n  \"historyMetadata\": {\r\n    \"activityDescription\": \"Complete order processing\",\r\n    \"actor\": {\r\n      \"avatarUrl\": \"http://mysystem/avatar/tony.jpg\",\r\n      \"displayName\": \"Tony\",\r\n      \"id\": \"tony\",\r\n      \"type\": \"mysystem-user\",\r\n      \"url\": \"http://mysystem/users/tony\"\r\n    },\r\n    \"cause\": {\r\n      \"id\": \"myevent\",\r\n      \"type\": \"mysystem-event\"\r\n    },\r\n    \"description\": \"From the order testing process\",\r\n    \"extraData\": {\r\n      \"Iteration\": \"10a\",\r\n      \"Step\": \"4\"\r\n    },\r\n    \"generator\": {\r\n      \"id\": \"mysystem-1\",\r\n      \"type\": \"mysystem-application\"\r\n    },\r\n    \"type\": \"myplugin:type\"\r\n  },\r\n  \"properties\": [\r\n    {\r\n      \"key\": \"key1\",\r\n      \"value\": \"Order number 10784\"\r\n    },\r\n    {\r\n      \"key\": \"key2\",\r\n      \"value\": \"Order number 10923\"\r\n    }\r\n  ],\r\n  \"update\": {\r\n    \"labels\": [\r\n      {\r\n        \"add\": \"triaged1\"\r\n      },\r\n      {\r\n        \"remove\": \"triaged\"\r\n      }\r\n    ]\r\n  }\r\n}"
+				},
+				"url": {
+					"raw": "{{baseURL}}rest/api/3/issue/{{issueID}}",
+					"host": [
+						"{{baseURL}}rest"
+					],
+					"path": [
+						"api",
+						"3",
+						"issue",
+						"{{issueID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Issue by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}rest/api/3/issue/{{issueID}}",
+					"host": [
+						"{{baseURL}}rest"
+					],
+					"path": [
+						"api",
+						"3",
+						"issue",
+						"{{issueID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete issue By Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}rest/api/3/issue/{{issueID}}",
+					"host": [
+						"{{baseURL}}rest"
+					],
+					"path": [
+						"api",
+						"3",
+						"issue",
+						"{{issueID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{passwordapikey}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "venomaamir@gmail.com",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
